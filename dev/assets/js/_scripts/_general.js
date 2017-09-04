@@ -1,11 +1,11 @@
 (function() {
 
-	//
-	// Variables
-	// --------------------------------------------------
+  //
+  // Variables
+  // --------------------------------------------------
 
   // Notes variables
-	var notes = {
+  var notes = {
     "1C": new Howl({
         urls: [ "assets/midia/261-C.mp3" ]
     }),
@@ -78,54 +78,116 @@
     "3B": new Howl({
         urls: [ "assets/midia/987-B.mp3" ]
     })
-	};
+  };
 
-	// Lock event for play
-	var lockEvent = {};
+  // Lock event for play
+  var lockEvent = {};
 
-	//
-	// Events
-	// --------------------------------------------------
+  //
+  // Events
+  // --------------------------------------------------
 
-	// Disable Select
-	// --------------------------------------------------
-	$('.piano').bind('selectstart dragstart', function(ev) {
-	  ev.preventDefault();
-	  return false;
-	});
+  // Disable Select
+  // --------------------------------------------------
+  $('.piano').bind('selectstart dragstart', function(ev) {
+    ev.preventDefault();
+    return false;
+  });
 
-	// Piano Play Keyboard
+  // Piano Play Keyboard
     // --------------------------------------------------
-	$(window).bind('keydown keyup', function(ev) {
-		var keyNo = ev.which;
+  $(window).bind('keydown keyup', function(ev) {
+    var keyNo = ev.which;
         var $key = $('[data-key="'+keyNo+'"]');
         var note = $key.attr('data-note');
-		if(note){
-			if (ev.type == 'keydown') {
-				if (!lockEvent[keyNo]) {
-					notes[note].play();
-					lockEvent[keyNo] = true;
-					$key.addClass('active');
-					$key.parent().addClass('active');
-		 		}
-			}
-			else if (ev.type == 'keyup') {
-				lockEvent[keyNo] = false;
-				$key.removeClass('active');
-				$key.parent().removeClass('active');
-			}
-		}
-	});
+    if(note){
+      if (ev.type == 'keydown') {
+        if (!lockEvent[keyNo]) {
+          notes[note].play();
+          lockEvent[keyNo] = true;
+          $key.addClass('active');
+          $key.parent().addClass('active');
+        }
+      }
+      else if (ev.type == 'keyup') {
+        lockEvent[keyNo] = false;
+        $key.removeClass('active');
+        $key.parent().removeClass('active');
+      }
+    }
+  });
 
-	// Piano Play Click
+  // Piano Play Click
   // --------------------------------------------------
-	$('.key > span').mousedown(function(){
-		// Save note
-		var me = $(this);
-		var noteClick = me.attr('data-note');
-		// Play sound
-		notes[noteClick].play();
-	});
+  $('.key > span').mousedown(function(){
+    // Save note
+    var me = $(this);
+    var noteClick = me.attr('data-note');
+    // Play sound
+    notes[noteClick].play();
+  });
+
+  const randomIdx = function (arr) {
+    return Math.floor(Math.random() * arr.length);
+  }
+  const play = function (d) {
+    const keys = $(".piano span").slice(0, 16);
+
+    const note = $(d).attr('data-note');
+
+    notes[note].play();
+  }
+
+  const silence = function () {
+    for (var note in notes) {
+      notes[note].stop();
+    }
+  }
+
+  $("#new").click(function () {
+    silence();
+
+    const keys = $(".piano span");
+    const rootKeys = keys.slice(0, 16);
+
+    // major chord, root position
+    const rootNote = randomIdx(rootKeys);
+    const thirdNote = rootNote + 4;
+    const fifthNote = thirdNote + 3;
+
+    window.quizzedNotes = [rootNote, thirdNote, fifthNote];
+
+    play(keys[rootNote]);
+    play(keys[thirdNote]);
+    play(keys[fifthNote]);
+  });
+
+
+  $("#repeat").click(function () {
+    silence();
+    const keys = $(".piano span");
+
+    for (var i = 0; i < window.quizzedNotes.length; i++) {
+      const note = window.quizzedNotes[i];
+       play(keys[note]);
+    }
+  });
+
+  $("#arp").click(function () {
+    silence();
+    const keys = $(".piano span");
+
+    for (var i = 0; i < window.quizzedNotes.length; i++) {
+      const note = window.quizzedNotes[i];
+      window.setTimeout(function () {
+        play(keys[note]);
+      }, i * 400);
+    }
+  });
+
+  $("#silence").click(function () {
+    silence();
+  });
 
 
 })();
