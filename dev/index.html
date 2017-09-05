@@ -69,10 +69,31 @@
     </li>
   </ul>
   <!-- End Piano -->
-  <button style="font-size: 20px; padding: 5px; border-radius: 2px; margin: 10px" id="new">new</button>
-  <button style="font-size: 20px; padding: 5px; border-radius: 2px; margin: 10px" id="repeat">repeat</button>
-  <button style="font-size: 20px; padding: 5px; border-radius: 2px; margin: 10px" id="arp">arp</button>
-  <button style="font-size: 20px; padding: 5px; border-radius: 2px; margin: 10px" id="silence">silence</button>
+  <div>
+  <style>
+  button {
+    font-size: 20px; padding: 5px; border-radius: 2px; margin: 10px
+  }
+  .options span {
+    margin-left: 6px;
+    margin-right: 12px;
+  }
+  </style>
+  <button id="new">new</button>
+  <button id="repeat">repeat</button>
+  <button id="arp">arp</button>
+  <button id="silence">silence</button>
+  </div>
+
+  <div class="options" style="margin: 10px">
+  <label><input type="checkbox" checked id="major"><span>major</span></label>
+  <label><input type="checkbox" checked id="minor"><span>minor</span></label>
+  <label><input type="checkbox" checked id="diminished"><span>diminished</span></label>
+  <label><input type="checkbox" checked id="augmented"><span>augmented</span></label>
+  <label><input type="checkbox" checked id="major-1"><span>major (1st inversion)</span></label>
+  <label><input type="checkbox" checked id="minor-1"><span>minor (1st inversion)</span></label
+  </div>
+
 
 
   <!-- Scripts -->

@@ -144,26 +144,47 @@
     }
   }
 
-  $("#new").click(function () {
+  const chordTypes = {
+    "major": [4, 3],
+    "minor": [3, 4],
+    "diminished": [3, 3],
+    "augmented": [4, 4],
+    "major-1": [3, 5],
+    "minor-1": [4, 5],
+  }
+
+  $("#new").off().click(function () {
     silence();
 
+    var selectedChordTypes = [];
+
+    for (var chordType in chordTypes) {
+      if ($("#" + chordType)[0].checked) {
+        selectedChordTypes.push(chordTypes[chordType]);
+      }
+    }
+
+    console.log(selectedChordTypes);
+
+    const randomChord = selectedChordTypes[randomIdx(selectedChordTypes)];
+
     const keys = $(".piano span");
-    const rootKeys = keys.slice(0, 16);
+    const rootKeys = keys.slice(0, 24 - randomChord[0] - randomChord[1]);
 
     // major chord, root position
-    const rootNote = randomIdx(rootKeys);
-    const thirdNote = rootNote + 4;
-    const fifthNote = thirdNote + 3;
+    const aNote = randomIdx(rootKeys);
+    const bNote = aNote + randomChord[0];
+    const cNote = bNote + randomChord[1];
 
-    window.quizzedNotes = [rootNote, thirdNote, fifthNote];
+    window.quizzedNotes = [aNote, bNote, cNote];
 
-    play(keys[rootNote]);
-    play(keys[thirdNote]);
-    play(keys[fifthNote]);
+    play(keys[aNote]);
+    play(keys[bNote]);
+    play(keys[cNote]);
   });
 
 
-  $("#repeat").click(function () {
+  $("#repeat").off().click(function () {
     silence();
     const keys = $(".piano span");
 
@@ -173,7 +194,7 @@
     }
   });
 
-  $("#arp").click(function () {
+  $("#arp").off().click(function () {
     silence();
     const keys = $(".piano span");
 
